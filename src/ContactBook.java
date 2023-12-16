@@ -6,37 +6,46 @@ public class ContactBook {
     private ArrayList<Contact> memory;
 
     public ContactBook() {
-        loadMemory();
+        //loadMemory();
+        loadData();
     }
 
     public void addContact(Contact contact) {
-        loadMemory();
+        //loadMemory();
+        loadData();
         memory.add(contact);
-        saveMemory();
+        //saveMemory();
+        saveData();
     }
 
     public ArrayList<Contact> getContacts() {
-        loadMemory();
+        //loadMemory();
+        loadData();
         return memory;
     }
 
     public void printContacts() {
-        loadMemory();
+        //loadMemory();
+        loadData();
         for (int i = 0; i < memory.size(); i++) {
             System.out.println((i + 1) + ") " + memory.get(i));
         }
     }
 
     public void deleteContact(int index) {
-        loadMemory();
+        //loadMemory();
+        loadData();
         memory.remove(index);
-        saveMemory();
+        //saveMemory();
+        saveData();
     }
 
     public void updateContact(int index, Contact contact) {
-        loadMemory();
+        //loadMemory();
+        loadData();
         memory.set(index, contact);
-        saveMemory();
+        //saveMemory();
+        saveData();
     }
 
     private void saveMemory() {
@@ -79,6 +88,39 @@ public class ContactBook {
                 bufferedWriter.close();
             } catch (Exception ex) {
             }
+        }
+    }
+
+    private void loadData() {
+        try {
+
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("memory.data"));
+            memory = (ArrayList<Contact>) inputStream.readObject();
+            inputStream.close();
+            if (memory == null) {
+                memory = new ArrayList<>();
+            }
+
+        } catch (Exception e) {
+            try {
+                memory = new ArrayList<>();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("memory.data"));
+                objectOutputStream.writeObject(memory);
+                objectOutputStream.close();
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private void saveData() {
+        try {
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("memory.data"));
+            objectOutputStream.writeObject(memory);
+            objectOutputStream.close();
+
+        } catch (Exception e) {
+
         }
     }
 
